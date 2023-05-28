@@ -13,7 +13,7 @@ project(
 deps = []
 deps += dependency('oatpp', version: '1.3.0', default_options: ['tests=false'])
 deps += dependency(
-    'oatpp-libressl',
+    'oatpp-openssl',
     version: '1.3.0',
     default_options: ['tests=false'],
 )
@@ -45,7 +45,7 @@ example_ssl_lib = library(
 )
 
 executable(
-    'example-ssl',
+    'example_ssl',
     files('src/App.cpp'),
     include_directories: include_directories('src'),
     dependencies: deps,
@@ -61,7 +61,7 @@ if get_option('tests')
     test_deps += dependency('oatpp-test', version: '1.3.0')
 
     example_ssl_test = executable(
-        'example_ssl__test',
+        'example_ssl_test',
         files('test/tests.cpp'),
         include_directories: include_directories('test', 'src'),
         link_with: example_ssl_lib,

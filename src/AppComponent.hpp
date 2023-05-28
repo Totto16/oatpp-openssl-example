@@ -4,9 +4,9 @@
 
 #include "client/MyApiClient.hpp"
 
-#include "oatpp-libressl/server/ConnectionProvider.hpp"
-#include "oatpp-libressl/client/ConnectionProvider.hpp"
-#include "oatpp-libressl/Config.hpp"
+#include "oatpp-openssl/server/ConnectionProvider.hpp"
+#include "oatpp-openssl/client/ConnectionProvider.hpp"
+#include "oatpp-openssl/Config.hpp"
 
 #include "oatpp/web/client/HttpRequestExecutor.hpp"
 
@@ -32,18 +32,18 @@ public:
    */
   OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
 
-    OATPP_LOGD("oatpp::libressl::Config", "pem='%s'", CERT_PEM_PATH);
-    OATPP_LOGD("oatpp::libressl::Config", "crt='%s'", CERT_CRT_PATH);
-    auto config = oatpp::libressl::Config::createDefaultServerConfigShared(CERT_CRT_PATH, CERT_PEM_PATH /* private key */);
+    OATPP_LOGD("oatpp::openssl::Config", "pem='%s'", CERT_PEM_PATH);
+    OATPP_LOGD("oatpp::openssl::Config", "crt='%s'", CERT_CRT_PATH);
+    auto config = oatpp::openssl::Config::createDefaultServerConfigShared(CERT_CRT_PATH, CERT_PEM_PATH /* private key */);
 
     /**
      * if you see such error:
-     * oatpp::libressl::server::ConnectionProvider:Error on call to 'tls_configure'. ssl context failure
+     * oatpp::openssl::server::ConnectionProvider:Error on call to 'tls_configure'. ssl context failure
      * It might be because you have several ssl libraries installed on your machine.
      * Try to make sure you are using libtls, libssl, and libcrypto from the same package
      */
 
-    return oatpp::libressl::server::ConnectionProvider::createShared(config, {"0.0.0.0", 8443, oatpp::network::Address::IP_4});
+    return oatpp::openssl::server::ConnectionProvider::createShared(config, {"0.0.0.0", 8443, oatpp::network::Address::IP_4});
   }());
   
   /**
@@ -74,10 +74,10 @@ public:
   }());
   
   OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ClientConnectionProvider>, sslClientConnectionProvider) ("clientConnectionProvider", [] {
-    auto config = oatpp::libressl::Config::createShared();
-    tls_config_insecure_noverifycert(config->getTLSConfig());
-    tls_config_insecure_noverifyname(config->getTLSConfig());
-    return oatpp::libressl::client::ConnectionProvider::createShared(config, {"httpbin.org", 443});
+    auto config = oatpp::openssl::Config::createShared();
+    // tls_config_insecure_noverifycert(config->getTLSConfig());
+    // tls_config_insecure_noverifyname(config->getTLSConfig());
+    return oatpp::openssl::client::ConnectionProvider::createShared(config, {"httpbin.org", 443});
   }());
   
   OATPP_CREATE_COMPONENT(std::shared_ptr<MyApiClient>, myApiClient)([] {

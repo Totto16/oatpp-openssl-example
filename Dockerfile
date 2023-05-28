@@ -1,26 +1,15 @@
-FROM alpine:latest
-
-RUN apk update && apk upgrade
-
-RUN apk add g++
-
-RUN apk add git
-RUN apk add make
-RUN apk add cmake
-
-RUN apk add libressl-dev
+FROM  python:3.11
 
 ADD . /service
 
-WORKDIR /service/utility
+WORKDIR /service
 
-RUN ./install-oatpp-modules.sh Release
+RUN pip install -U meson ninja
 
-WORKDIR /service/build
+RUN meson setup build
 
-RUN cmake ..
-RUN make
+RUN meson compile -C build
 
-EXPOSE 8443 8443
+EXPOSE 8000 8000
 
-ENTRYPOINT ["./example-libressl-exe"]
+ENTRYPOINT ["./build/example_ssl"]

@@ -2,8 +2,6 @@
 #include "./controller/MyController.hpp"
 #include "./AppComponent.hpp"
 
-#include "oatpp-libressl/Callbacks.hpp"
-
 #include "oatpp/network/Server.hpp"
 
 #include <iostream>
@@ -16,14 +14,6 @@
  *  3) run server
  */
 void run() {
-  
-  /* set lockingCallback for libressl */
-  oatpp::libressl::Callbacks::setDefaultCallbacks();
-  
-  /* ignore SIGPIPE */
-  #if !(defined(WIN32) || defined(_WIN32))
-    std::signal(SIGPIPE, SIG_IGN);
-  #endif
   
   AppComponent components; // Create scope Environment components
   

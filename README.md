@@ -1,9 +1,11 @@
-# TLS-LibreSSL Example [![Build Status](https://dev.azure.com/lganzzzo/lganzzzo/_apis/build/status/oatpp.example-libressl?branchName=master)](https://dev.azure.com/lganzzzo/lganzzzo/_build?definitionId=13&branchName=master)
+# TLS-OpenSSL Example
 
-Example project of how-to use [oatpp-libressl](https://github.com/oatpp/oatpp-libressl) module. 
+Example project of how-to use [oatpp-openssl](https://github.com/oatpp/oatpp-openssl) module. 
 - Serve via HTTPS 
 - Make client calls via HTTPS. 
 - Using oatpp Async API.
+
+Forked from the [here](https://github.com/oatpp/example-libressl)
 
 See more:
 
@@ -13,7 +15,7 @@ See more:
 
 ## Overview
 
-This project is using [oatpp](https://github.com/oatpp/oatpp) and [oatpp-libressl](https://github.com/oatpp/oatpp-libressl) modules.
+This project is using [oatpp](https://github.com/oatpp/oatpp) and [oatpp-openssl](https://github.com/oatpp/oatpp-openssl) modules.
 
 ### Project layout
 
@@ -59,14 +61,13 @@ $ docker run -p 8443:8443 -t example-ssl
 Configure server secure connection provider
 
 ```c++
-
 /**
  *  Create ConnectionProvider component which listens on the port
  */
 OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ServerConnectionProvider>, serverConnectionProvider)([] {
   /* non_blocking connections should be used with AsyncHttpConnectionHandler for AsyncIO */
-  auto config = oatpp::libressl::Config::createDefaultServerConfig("cert/test_key.pem", "cert/test_cert.crt");
-  return oatpp::libressl::server::ConnectionProvider::createShared(config, 8443, true /* true for non_blocking */);
+  auto config = oatpp::openssl::Config::createDefaultServerConfig("cert/test_key.pem", "cert/test_cert.crt");
+  return oatpp::openssl::server::ConnectionProvider::createShared(config, {"localhost", 8443});
 }());
 
 ```
@@ -75,10 +76,10 @@ Configure client secure connection provider
 
 ```c++
 OATPP_CREATE_COMPONENT(std::shared_ptr<oatpp::network::ClientConnectionProvider>, sslClientConnectionProvider) ([] {
-  auto config = oatpp::libressl::Config::createShared();
-  tls_config_insecure_noverifycert(config->getTLSConfig());
-  tls_config_insecure_noverifyname(config->getTLSConfig());
-  return oatpp::libressl::client::ConnectionProvider::createShared(config, "httpbin.org", 443);
+  auto config = oatpp::openssl::Config::createShared();
+  // tls_config_insecure_noverifycert(config->getTLSConfig());
+  // tls_config_insecure_noverifyname(config->getTLSConfig());
+  return oatpp::openssl::client::ConnectionProvider::createShared(config, "httpbin.org", 443);
 }());
 ```
 
