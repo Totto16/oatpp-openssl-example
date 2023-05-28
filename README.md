@@ -36,28 +36,20 @@ This project is using [oatpp](https://github.com/oatpp/oatpp) and [oatpp-libress
 
 ### Build and Run
 
-#### Using CMake
-**Requires** 
+#### Using Meson
 
-- LibreSSL installed. You may refer to this sh script - how to install libressl - 
-[install-libressl.sh](https://github.com/oatpp/oatpp-libressl/blob/master/utility/install-deps/install-libressl.sh).  
-Or try something like ```$ apk add libressl-dev```
-
-- `oatpp` and `oatpp-libressl` modules installed. You may run `utility/install-oatpp-modules.sh` 
-script to install required oatpp modules.
 
 ```
-$ mkdir build && cd build
-$ cmake ..
-$ make 
-$ ././example-libressl-exe  # - run application.
+$ meson setup build
+$ meson compile -C build
+$ ./build/example-ssl  # - run application.
 ```
 
 #### In Docker
 
 ```
-$ docker build -t example-libressl .
-$ docker run -p 8443:8443 -t example-libressl
+$ docker build -t example-ssl .
+$ docker run -p 8443:8443 -t example-ssl
 ```
 
 ---
