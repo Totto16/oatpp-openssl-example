@@ -25,15 +25,6 @@ jobs:
                   version: 13
                   platform: x64
 
-            - name: setup and compile libressl
-              run: |
-                  wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.8.0.tar.gz
-                  tar xzf libressl-3.8.0.tar.gz
-                  cd libressl-3.8.0
-                  ./configure
-                  make
-                  sudo make install
-
             - name: Configure
               run: meson setup build -Dbuildtype=release -Dtests=true
 
