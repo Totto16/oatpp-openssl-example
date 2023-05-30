@@ -16,6 +16,13 @@ oatpp_module_so_version = (
 
 install = get_option('install')
 
+override_options = []
+if get_option('shared_libs')
+    override_options += 'default_library=shared'
+else
+    override_options += 'default_library=static'
+endif
+
 deps = []
 src_files = []
 inc_dirs = []
@@ -38,6 +45,7 @@ lib_oatpp_openssl = library(
     dependencies: deps,
     include_directories: inc_dirs,
     install: install,
+    override_options: override_options,
     soversion: oatpp_module_so_version,
     version: oatpp_module_version,
 )

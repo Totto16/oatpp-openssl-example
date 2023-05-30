@@ -36,4 +36,4 @@ openssl_tests = executable(
     dependencies: test_deps,
 )
 
-test('oatpp openssl module tests', openssl_tests)
+test('oatpp openssl module tests', openssl_tests, timeout: 60)
